@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Jenkins ECS Task
+Parameters:
+  LogGroupName:
+    Type: String
+    Description: The AWS CloudWatch log group to output logs to.
+    Default: "/ecs/jenkins"
+
+Resources:
+
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 7
+      LogGroupName: !Ref LogGroupName
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: jenkins
+        Essential: 'true'
+        Image: "jenkins"
+        MemoryReservation: 800
+        PortMappings:
+        - HostPort: 0
+          ContainerPort: 8080
+        - HostPort: 0
+          ContainerPort: 50000
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-region:
+              Ref: AWS::Region
+            awslogs-group:
+              Ref: LogGroup
+Outputs:
+  TaskArn:
+    Description: ARN of the TaskDefinition
+    Value: !Ref TaskDefinition

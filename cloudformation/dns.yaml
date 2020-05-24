@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Jenkins DNS stack
+Parameters:
+  #------------------------
+  # Deployment Information
+  #------------------------
+  environment:
+    Type: String
+    Description: Name of the environment
+    Default: production
+
+  #-----------------------
+  # Route53 Configuration
+  #-----------------------
+  Domain:
+    Type: String
+    Description: The HostedZoneName to create the endpoint on
+  SubDomain:
+    Type: String
+    Description: The subdomain to be used by jenkins
+
+  #-----------
+  # Resources
+  #-----------
+  JenkinsDns:
+    Type: String
+    Description: Load balancer DNS endpoint for Jenkins
+
+Resources:
+  JenkinsEndpoint:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub "${Domain}."
+      Comment: 'DNS name for jenkins'
+      Name: !Sub "${SubDomain}.${Domain}."
+      Type: CNAME
+      TTL: '300'
+      ResourceRecords:
+        - !Ref JenkinsDns
+
+Outputs:
+  JenkinsEndpoint:
+    Description: 'DNS name for Jenkins'
+    Value: !Sub "${SubDomain}.${Domain}."
