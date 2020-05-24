@@ -33,6 +33,6 @@ jobs:
       uses: aws-actions/aws-cloudformation-github-deploy@v1
       with:
         name: ecs-jenkins
-        template: cloudformation/top.yaml
+        template: cloudformation/jenkins/top.yaml
         capabilities: "CAPABILITY_NAMED_IAM,CAPABILITY_IAM"
         parameter-overrides: VpcId=${{ secrets.VPC_ID }},PublicSubnets=${{ secrets.SUBNET_IDS }},EcsCluster=${{ secrets.CLUSTER }},PortalCertificate=${{ secrets.CERTIFICATE }},Domain=${{ secrets.DOMAIN }}

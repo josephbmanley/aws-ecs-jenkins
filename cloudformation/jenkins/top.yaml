@@ -85,7 +85,7 @@ Resources:
         environment: !Ref environment
         release: !Ref release
         VpcId: !Ref VpcId
-        PublicSubnets: !Ref PublicSubnets
+        PublicSubnets: !Join [",", !Split [" ", !Ref PublicSubnets]]
         PortalCertificate: !Ref PortalCertificate
 
   #-------------------
